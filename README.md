@@ -1,59 +1,59 @@
-# Bilibili video crawling
+#  Bilibili Video Crawling and Synthesis Script
 
-## 一、简介
-本脚本用于从B站获取视频和音频资源，并将它们合成一个完整的视频文件。请注意，爬取和使用B站内容须遵守相关法律法规及网站使用协议。
+## 1. Introduction
+This script is used to obtain video and audio resources from Bilibili and synthesize them into a complete video file. Please note that crawling and using Bilibili content must comply with relevant laws, regulations, and website usage protocols.
 
-## 二、环境要求
+## 2. Environment Requirements
 - Python 3.x
-- 安装`requests`库：用于HTTP请求
-- 安装`moviepy`库：用于视频编辑
+- Install `requests` library: used for HTTP requests
+- Install `moviepy` library: used for video editing
 
-## 三、安装依赖
-您可以使用pip安装所需的依赖库：
+## 3. Install Dependencies
+You can use pip to install the required dependency libraries:
 ```bash
 pip install requests moviepy
 ```
-* 注意：当运行代码报错时，No module named ‘moviepy.editor’，因为你下载的moviepy库是最新的2.x版本，可能不包含editor模块，请重新安装moviepy库。不妨试下以下代码进行重新安装。经资料显示，python3.7版本后不支持 from moviepy.editor 引用方式，由于是moviepy 2.0.0版本
+* Note: If you encounter an error when running the code, No module named ‘moviepy.editor’, this is because the moviepy library version you downloaded is the latest 2.x version, which may not include the editor module. It is recommended to reinstall the moviepy library. According to the information, the from moviepy.editor import * reference method is not supported after Python 3.7 version. Since it is moviepy 2.0.0 version
 ```
 pip uninstall moviepy
 pip install moviepy==1.0.3
 ```
 
-## 四、代码结构
-### 1）导入库
+## 4. Code Structure
+### 1） Import Libraries
 ```
 import requests
 from moviepy.editor import *
 ```
 
-* requests：用于HTTP请求，获取视频和音频数据 
-* moviepy.editor：用于视频编辑，包括音频和视频文件的处理与合成
+* requests: used for HTTP requests, to obtain video and audio data
+* moviepy.editor: used for video editing, including processing and synthesizing audio and video files
   
-### 2）定义资源链接与请求头
+### 2）Define Resource Links and Request Headers
 ```
-#视频地址
+#Video address
 url_4 = "https://cn-hbwh-fx-01-13.bilivideo.com/upgcxcode/27/89/248548927/248548927-1-100026.m4se=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEqxTEto8BTrNvN0GvT90W5JZMkX_YN0MvXg8gNEV4NC8xNEV4N03eN0B5tZlqNxTEto8BTrNvNeZVuJ10Kj_g2UB02J0mN0B5tZlqNCNEto8BTrNvNC7MTX502C8f2jmMQJ6mqF2fka1mqx6gqj0eN0B599M=&uipk=5&nbs=1&deadline=1742382759&gen=playurlv2&os=bcache&oi=3746251271&trid=0000aae5a0b9d91f46a1baf3468da4b58ddau&mid=3461562702498712&platform=pc&og=cos&upsig=dfba35ea6901d1e27d167c89beafc2af&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=3881&bvc=vod&nettype=0&orderid=0,3&buvid=9AEF060E-7BA5-F9C3-A71C-FA399E82F67972890infoc&build=0&f=u_0_0&agrr=1&bw=131301&np=151388311&logo=80000000"
-#音频地址
+#Audio address
 url_3 = "https://cn-hbwh-fx-01-14.bilivideo.com/upgcxcode/27/89/248548927/248548927-1-30280.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEqxTEto8BTrNvN0GvT90W5JZMkX_YN0MvXg8gNEV4NC8xNEV4N03eN0B5tZlqNxTEto8BTrNvNeZVuJ10Kj_g2UB02J0mN0B5tZlqNCNEto8BTrNvNC7MTX502C8f2jmMQJ6mqF2fka1mqx6gqj0eN0B599M=&uipk=5&nbs=1&deadline=1742382759&gen=playurlv2&os=bcache&oi=3746251271&trid=0000aae5a0b9d91f46a1baf3468da4b58ddau&mid=3461562702498712&platform=pc&og=cos&upsig=77541264ad991b1e1712438054cd3ba1&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=3882&bvc=vod&nettype=0&orderid=0,3&buvid=9AEF060E-7BA5-F9C3-A71C-FA399E82F67972890infoc&build=0&f=u_0_0&agrr=1&bw=40017&np=151388311&logo=80000000"
 
 
-# 请求头
+# Request headers
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SLBrowser/9.0.6.2081 SLBChan/112 SLBVPV/64-bit",
     "referer": "https://www.bilibili.com/video/BV1F5411L7D4/?vd_source=2cc7318b7d6a83e1149d8a8a4b791f76"
 }
 ```
-* url_4：指向无声视频资源的URL。
-* url_4：指向无声视频资源的URL。
-* headers：定义HTTP请求的头部信息，包括用户代理和引用来源，以便模拟浏览器访问B站。
+* url_4： points to the URL of the silent video resource.
+* url_4：points to the URL of the silent video resource.
+* headers：defines the HTTP request header information, including user-agent and referer, to simulate a browser accessing Bilibili.
 
-### 3）获取资源函数
+### 3）Get Resource Function
 ```
 def get_resource(url, format):
     """
-    用于爬取资源
-    :param url: 资源的网址
-    :param format: 保存的文件名称
+    Used to crawl resources
+    :param url: URL of the resource
+    :param format: file name to save
     :return: None
     """
     res = requests.get(url, headers=headers)
@@ -61,16 +61,16 @@ def get_resource(url, format):
     with open(format, "wb") as f:
         f.write(res.content)
 ```
-* get_resource：该函数根据给定的URL下载资源，并保存为指定的文件名。它打印出请求的状态码以帮助调试。
+* get_resource：this function downloads resources based on the given URL and saves them with the specified file name. It prints the status code of the request to help with debugging.
 
-### 4）合成视频函数
+### 4）Synthesize Video Function
 ```
 def set_audio(f1, f2, f3):
     """
-    用于音视频合成
-    :param f1: 无声视频名称
-    :param f2: 音频名称
-    :param f3: 合成后（输出）的视频名称
+     Used for audio-video synthesis
+    :param f1: silent video file name
+    :param f2: audio file name
+    :param f3: output video file name after synthesis
     :return: None
     """
     videoclip = VideoFileClip(f1)
@@ -78,21 +78,21 @@ def set_audio(f1, f2, f3):
     vc = videoclip.set_audio(audioclip)
     vc.write_videofile(f3, codec="libx264", audio_codec="aac")
 ```
-* set_audio：该函数将一个无声视频文件与一个音频文件合成，并将结果保存为一个新的视频文件。它使用moviepy库来处理视频和音频。
+* set_audio：this function synthesizes a silent video file with an audio file and saves the result as a new video file. It uses the moviepy library to handle video and audio.
 
-### 5）主程序入口
+### 5）Main Program Entry
 ```
 if __name__ == "__main__":
     get_resource(url_4, "1.mp4")
     get_resource(url_3, "2.mp3")
     set_audio("1.mp4", "2.mp3", "3.mp4")
 ```
-* 首先调用get_resource函数分别下载无声视频和音频，保存为1.mp4和2.mp3。
-* 然后调用set_audio函数将这两个文件合并，最终生成3.mp4。
+* First, the get_resource function is called to download the silent video and audio, saving them as 1.mp4 and 2.mp3.
+* Then, the set_audio function is called to merge these two files, ultimately generating 3.mp4.
 
-## 五、注意事项
-* 请确保下载和使用B站内容符合相关法律法规和网站的使用条款。
-* 视频和音频的URL可能会随时间变化，需要根据实际情况更新。
+## 5. Notes
+* Please ensure that downloading and using Bilibili content complies with relevant laws, regulations, and website usage terms.
+* The URLs for video and audio may change over time, requiring updates based on actual circumstances.
    
-## 六、参考资料
+## 6. References
 https://blog.csdn.net/m0_72225765/article/details/145575032?fromshare=blogdetail&sharetype=blogdetail&sharerId=145575032&sharerefer=PC&sharesource=m0_74149651&sharefrom=from_link
